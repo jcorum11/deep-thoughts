@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
-const client = new ApolloClient({ uri: "http://localhost:3001/graphql" });
+const client = new ApolloClient({ uri: "/graphql" });
 function App() {
   return (
     <ApolloProvider client={client}>
