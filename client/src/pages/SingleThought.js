@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import { QUERY_THOUGHT, QUERY_THOUGHTS } from "../utils/queries";
 import ReactionList from "../components/ReactionList";
+import moduleName from '../utils/auth';
+import moduleName from '../components/ReactionForm';
 
 const SingleThought = (props) => {
   const { id: thoughtId } = useParams();
@@ -10,6 +12,21 @@ const SingleThought = (props) => {
     variables: { id: thoughtId },
   });
   const thought = data?.thought || {};
+  const [reactionBody, setBody] = useState("");
+  const [characterCount, setCharacterCount] = useState(0);
+
+  const handleChange = (event) => {
+    if (event.target.value.length <= 280) {
+      setBody(event.target.value);
+      setCharacterCount(event.target.value.length);
+    }
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setBody("");
+    setCharacterCount(0);
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -30,6 +47,7 @@ const SingleThought = (props) => {
       {thought.reactionCount > 0 && (
         <ReactionList reactions={thought.reactions} />
       )}
+      {Auth.loggedIn() && <ReactionForm thoughtId={thought._id} />}
     </div>
   );
 };
